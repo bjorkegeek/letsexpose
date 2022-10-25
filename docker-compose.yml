@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  letsexpose-nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    image: letsexpose-nginx
+    network_mode: "host"
+    volumes:
+     - ./config:/letsexpose-config
+     - ./data/certbot/conf:/etc/letsencrypt
+     - ./data/certbot/www:/var/www/certbot
+  letsexpose-certbot:
+    build:
+      context: .
+      dockerfile: Dockerfile.certbot
+    image: letsexpose-certbot
+    volumes:
+     - ./config:/letsexpose-config
+     - ./data/certbot/conf:/etc/letsencrypt
+     - ./data/certbot/www:/var/www/certbot
+    profiles:
+      - tools

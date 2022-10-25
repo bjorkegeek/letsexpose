@@ -1,0 +1,26 @@
+#
+#  Sample configuration file for letsexpose.
+#  Copy this file to config.yaml and edit to your needs
+#
+letsencrypt:
+  email: email@example.com # You must change this!!
+  staging: true            # Set this to false to generate real certs
+hosts:
+  # One entry here for each host name to serve
+  myhost.acme.com:
+    # One entry here for each port to serve under given host
+    443:
+      # One entry here for each service to expose
+      - location: /api # <-- URI on which to expose service
+        # Backend URI
+        backend: http://localhost:9090/api
+      - location: /secret
+        backend: http://localhost:9091/secret
+        # Optional: Protect the service using HTTP AUTH
+        http_auth:
+          # The realm to display for the user
+          realm: The secret area
+          # The username to access the service
+          username: bengt
+          # htpasswd password. Use {PLAIN} prefix for unhashed pwds
+          password: "{PLAIN}jahaa"

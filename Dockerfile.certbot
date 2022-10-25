@@ -1,0 +1,17 @@
+FROM certbot/certbot AS builder
+WORKDIR /build-letsexpose
+RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+RUN python3 -m ensurepip
+RUN pip3 install --no-cache --upgrade pip setuptools
+RUN pip3 install --no-cache nuitka ordered-set
+RUN apk add patchelf gcc python3-dev musl-dev
+COPY letsexpose-tool/requirements.txt ./
+RUN pip3 install -r requirements.txt
+COPY letsexpose-tool/letsexpose_tool.py ./
+RUN python -m nuitka --standalone letsexpose_tool.py
+
+FROM certbot/certbot
+COPY --from=builder /build-letsexpose/letsexpose_tool.dist /opt/letsexpose_tool
+RUN ln -s /opt/letsexpose_tool/letsexpose_tool /usr/bin/letsexpose_tool
+ENTRYPOINT []
+CMD ['/bin/sh']
