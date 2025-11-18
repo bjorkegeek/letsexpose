@@ -14,4 +14,4 @@ FROM certbot/certbot
 COPY --from=builder /build-letsexpose/letsexpose_tool.dist /opt/letsexpose_tool
 RUN ln -s /opt/letsexpose_tool/letsexpose_tool /usr/bin/letsexpose_tool
 ENTRYPOINT []
-CMD ['/bin/sh']
+CMD ["/bin/sh"]
